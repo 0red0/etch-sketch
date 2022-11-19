@@ -3,6 +3,7 @@ const rangeInput = document.getElementById("range");
 const showSize = document.querySelector(".size");
 const randomBtn = document.getElementById("random");
 const blackBtn = document.getElementById("black");
+const gridBtn = document.getElementById("grid-lines");
 const clearBtn = document.getElementById("clear");
 const switchEtching = document.querySelector("section p");
 
@@ -11,11 +12,10 @@ let colorize = "black";
 let click = false;
 
 document.querySelector("body").addEventListener("click", (e) => {
-   if (e.target.className == "block") {
+   if (e.target.classList.contains("block")) {
       click = !click;
       if (click) {
          switchEtching.style.display = "none";
-         // switchEtching.innerHTML = "";
       } else {
          switchEtching.style.display = "block";
          switchEtching.innerText = "Etching Off!";
@@ -41,15 +41,15 @@ function createBlocks(num) {
    let numbersOfBlocks = num * num;
    for (let i = 0; i < numbersOfBlocks; i++) {
       let block = document.createElement("div");
-      block.className = "block";
+      block.classList.add("block", "marg");
       block.addEventListener("mouseover", clrBlock);
       gridHolder.append(block);
    }
 }
 /// change block color
-if (!click) {
-   console.log("ok");
-   function clrBlock() {
+function clrBlock() {
+   if (click) {
+      console.log("ok");
       changeClr();
       if (colorize == "randomize") {
          this.style.backgroundColor = `hsl(${Math.random() * 360},100%,50%)`;
@@ -67,9 +67,13 @@ function changeClr() {
    randomBtn.addEventListener("click", () => (colorize = "randomize"));
    blackBtn.addEventListener("click", () => (colorize = "blackize"));
 }
-/// clear all colors
+// clear all colors
+let divs = document.querySelectorAll("section div");
 clearBtn.addEventListener("click", clearClrs);
 function clearClrs() {
-   let divs = document.querySelectorAll("section div");
-   divs.forEach((d) => (d.style.backgroundColor = "transparent"));
+   divs.forEach((d) => (d.style.backgroundColor = "white"));
 }
+// grid button
+gridBtn.addEventListener("click", () => {
+   divs.forEach((d) => d.classList.toggle("marg"));
+});
